@@ -14,6 +14,9 @@ import java.util.Map;
 @Log4j2
 public abstract class MvcWorker {
 
+    /**
+     * Id of first controller
+     */
     public static final Long FIRST_CONTROLLER_ID = 1L;
 
     /**
@@ -73,6 +76,10 @@ public abstract class MvcWorker {
         return controller;
     }
 
+    /**
+     * see {@link #controllers}
+     * @param controllers all controllers
+     */
     public abstract void setControllers(Map<Long, Controller> controllers);
 
 }

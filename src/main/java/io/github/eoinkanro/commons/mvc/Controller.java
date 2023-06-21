@@ -1,5 +1,8 @@
 package io.github.eoinkanro.commons.mvc;
 
+/**
+ * Controller with {@link View} and logic
+ */
 public abstract class Controller {
 
     /**
