@@ -13,6 +13,11 @@ import lombok.extern.log4j.Log4j2;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SystemUtils {
 
+    /**
+     * Sleep current thread
+     *
+     * @param sleepMs millis to sleep
+     */
     public static void sleep(long sleepMs) {
         try {
             Thread.sleep(sleepMs);
