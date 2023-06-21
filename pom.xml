@@ -13,6 +13,7 @@
         <java.version>17</java.version>
     </properties>
 
+    <name>commons</name>
     <description>Library for my projects</description>
     <url>https://github.com/EoinKanro/commons</url>
     <inceptionYear>2023</inceptionYear>
@@ -114,6 +115,11 @@
             <id>release</id>
             <build>
                 <plugins>
+                    <plugin>
+                        <groupId>org.kordamp.maven</groupId>
+                        <artifactId>pomchecker-maven-plugin</artifactId>
+                        <version>1.9.0</version>
+                    </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
