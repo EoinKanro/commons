@@ -4,15 +4,13 @@ import io.github.eoinkanro.commons.mvc.impl.ForwardAction;
 import jakarta.annotation.Nullable;
 import lombok.extern.log4j.Log4j2;
 
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 
 /**
  * MVC worker, that can run controllers
  */
 @Log4j2
-public abstract class MvcWorker {
+public class MvcWorker {
 
     /**
      * Id of first controller
@@ -22,13 +20,13 @@ public abstract class MvcWorker {
     /**
      * Stack of controllers
      */
-    private final Deque<Controller> controllersStack = new LinkedList<>();
+    protected final Deque<Controller> controllersStack = new LinkedList<>();
 
     /**
      * All existing controllers
      * Controller id - Controller
      */
-    protected Map<Long, Controller> controllers;
+    protected final Map<Long, Controller> controllers = new HashMap<>();
 
     /**
      * Run MVC worker
@@ -66,20 +64,32 @@ public abstract class MvcWorker {
      * @return controller or null
      */
     @Nullable
-    private Controller getController(Long id) {
-        Controller controller = null;
-        if (controllers == null || !controllers.containsKey(id)) {
+    protected Controller getController(Long id) {
+        Controller controller = controllers.get(id);
+        if (controller == null) {
             log.error("Fatal error: can't find controller with id {}", id);
-        } else {
-            controller = controllers.get(id);
         }
         return controller;
     }
 
     /**
-     * see {@link #controllers}
-     * @param controllers all controllers
+     * Add controllers to worker
+     *
+     * @param newControllers controllers
      */
-    public abstract void setControllers(Map<Long, Controller> controllers);
+    public void addControllers(List<Controller> newControllers) {
+        Optional.ofNullable(newControllers).ifPresent(cc -> cc.forEach(this::addController));
+    }
+
+    /**
+     * Add controller to worker
+     *
+     * @param controller controller
+     */
+    public void addController(Controller controller) {
+        if (controller != null && !controllers.containsKey(controller.getId())) {
+            controllers.put(controller.getId(), controller);
+        }
+    }
 
 }

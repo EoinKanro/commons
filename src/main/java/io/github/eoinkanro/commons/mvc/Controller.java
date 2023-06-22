@@ -1,23 +1,24 @@
 package io.github.eoinkanro.commons.mvc;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
 /**
  * Controller with {@link View} and logic
  */
+@RequiredArgsConstructor
 public abstract class Controller {
 
     /**
-     * ID of current controller
-     *
-     * @return id
+     * Id of controller
      */
-    public abstract Long getId();
+    @Getter
+    private final Long id;
 
     /**
      * View of controller
-     *
-     * @param view view
      */
-    public abstract void setView(View view);
+    private final View view;
 
     /**
      * Run controller
