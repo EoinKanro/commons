@@ -41,4 +41,8 @@ public abstract class Controller {
      */
     protected abstract Action performLogic();
 
+    public String toString() {
+        return "Controller [Name: " + this.getClass().getSimpleName() + " Id: " + id +"]";
+    }
+
 }

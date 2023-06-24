@@ -31,7 +31,7 @@ public class MvcWorker {
     /**
      * Run MVC worker
      */
-    public void perform() {
+    public final void perform() {
         Controller firstController = getController(FIRST_CONTROLLER_ID);
         if (firstController == null) {
             return;
@@ -64,7 +64,7 @@ public class MvcWorker {
      * @return controller or null
      */
     @Nullable
-    protected Controller getController(Long id) {
+    private Controller getController(Long id) {
         Controller controller = controllers.get(id);
         if (controller == null) {
             log.error("Fatal error: can't find controller with id {}", id);
@@ -77,7 +77,7 @@ public class MvcWorker {
      *
      * @param newControllers controllers
      */
-    public void addControllers(List<Controller> newControllers) {
+    public final void addControllers(List<Controller> newControllers) {
         Optional.ofNullable(newControllers).ifPresent(cc -> cc.forEach(this::addController));
     }
 
@@ -86,10 +86,15 @@ public class MvcWorker {
      *
      * @param controller controller
      */
-    public void addController(Controller controller) {
-        if (controller != null && !controllers.containsKey(controller.getId())) {
-            controllers.put(controller.getId(), controller);
-        }
+    public final void addController(Controller controller) {
+        Optional.ofNullable(controller).ifPresent(c -> {
+            if (!controllers.containsKey(c.getId())) {
+                controllers.put(c.getId(), c);
+                if (log.isDebugEnabled()) log.debug("{} was added", c);
+            } else {
+                log.warn("{} wasn't added, the id is already registered", c);
+            }
+        });
     }
 
 }
