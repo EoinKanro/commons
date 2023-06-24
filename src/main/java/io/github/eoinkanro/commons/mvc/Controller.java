@@ -13,12 +13,12 @@ public abstract class Controller {
      * Id of controller
      */
     @Getter
-    private final Long id;
+    protected final Long id;
 
     /**
      * View of controller
      */
-    private final View view;
+    protected final View view;
 
     /**
      * Run controller
