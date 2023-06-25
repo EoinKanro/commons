@@ -15,7 +15,7 @@ public abstract class Controller {
     /**
      * View of controller
      *
-     * @param view
+     * @param view view
      */
     public abstract void setView(View view);
 
