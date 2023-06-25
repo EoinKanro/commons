@@ -1,6 +1,7 @@
 package io.github.eoinkanro.commons.mvc;
 
 import io.github.eoinkanro.commons.mvc.impl.ForwardAction;
+import io.github.eoinkanro.commons.mvc.impl.StayAction;
 import jakarta.annotation.Nullable;
 import lombok.extern.log4j.Log4j2;
 
@@ -53,6 +54,8 @@ public class MvcWorker {
                 } else if(!forwardAction.isSaveCurrent()) {
                     controllersStack.add(currentController);
                 }
+            } else if (action instanceof StayAction) {
+                controllersStack.add(currentController);
             }
         }
     }
