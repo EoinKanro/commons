@@ -7,11 +7,15 @@ public abstract class Controller {
 
     /**
      * Id of controller
+     *
+     * @return id
      */
     public abstract Long getId();
 
     /**
      * View of controller
+     *
+     * @param view
      */
     public abstract void setView(View view);
 
