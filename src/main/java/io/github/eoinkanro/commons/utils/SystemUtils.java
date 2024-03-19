@@ -6,7 +6,7 @@ import lombok.extern.log4j.Log4j2;
 
 /**
  * Class with system utils
- * It's exist mostly for coverage... :c
+ * It exists mostly for coverage... :c
  */
 
 @Log4j2
@@ -21,7 +21,7 @@ public class SystemUtils {
     public static void sleep(long sleepMs) {
         try {
             Thread.sleep(sleepMs);
-        } catch (Exception e) {
+        } catch (InterruptedException e) {
             log.error("Interrupt error", e);
             Thread.currentThread().interrupt();
         }
