@@ -8,7 +8,7 @@ import lombok.extern.log4j.Log4j2;
 import java.util.*;
 
 /**
- * MVC worker, that can run controllers
+ * Runs MVC logic
  */
 @Log4j2
 public class MvcWorker {
@@ -21,34 +21,37 @@ public class MvcWorker {
     /**
      * Stack of controllers
      */
-    protected final Deque<Controller> controllersStack = new LinkedList<>();
+    protected final Deque<Controller<?>> controllersStack = new LinkedList<>();
 
     /**
      * All existing controllers
      * Controller id - Controller
      */
-    protected final Map<Long, Controller> controllers = new HashMap<>();
+    protected final Map<Long, Controller<?>> controllers = new HashMap<>();
+
+    private ActionData previousControllerData = null;
 
     /**
      * Run MVC worker
      */
     public final void perform() {
-        Controller firstController = getController(FIRST_CONTROLLER_ID);
+        Controller<?> firstController = getController(FIRST_CONTROLLER_ID);
         if (firstController == null) {
             return;
         }
 
         controllersStack.add(firstController);
         while (!controllersStack.isEmpty()) {
-            Controller currentController = controllersStack.pollLast();
-            Action action = currentController.perform();
+            Controller<?> currentController = controllersStack.pollLast();
+            Action action = currentController.perform(previousControllerData);
+            previousControllerData = action.getActionData();
 
             if (action instanceof ForwardAction forwardAction) {
                 if (forwardAction.isSaveCurrent()) {
                     controllersStack.add(currentController);
                 }
 
-                Controller nextController = getController(forwardAction.getNextControllerId());
+                Controller<?> nextController = getController(forwardAction.getNextControllerId());
                 if (nextController != null) {
                     controllersStack.add(nextController);
                 } else if(!forwardAction.isSaveCurrent()) {
@@ -67,8 +70,8 @@ public class MvcWorker {
      * @return controller or null
      */
     @Nullable
-    private Controller getController(Long id) {
-        Controller controller = controllers.get(id);
+    private Controller<?> getController(Long id) {
+        Controller<?> controller = controllers.get(id);
         if (controller == null) {
             log.error("Fatal error: can't find controller with id {}", id);
         }
@@ -80,7 +83,7 @@ public class MvcWorker {
      *
      * @param newControllers controllers
      */
-    public final void addControllers(List<Controller> newControllers) {
+    public final void addControllers(List<Controller<?>> newControllers) {
         Optional.ofNullable(newControllers).ifPresent(cc -> cc.forEach(this::addController));
     }
 
@@ -89,11 +92,11 @@ public class MvcWorker {
      *
      * @param controller controller
      */
-    public final void addController(Controller controller) {
+    public final void addController(Controller<?> controller) {
         Optional.ofNullable(controller).ifPresent(c -> {
             if (!controllers.containsKey(c.getId())) {
                 controllers.put(c.getId(), c);
-                if (log.isDebugEnabled()) log.debug("{} was added", c);
+                log.debug("{} was added", c);
             } else {
                 log.warn("{} wasn't added, the id is already registered", c);
             }

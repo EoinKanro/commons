@@ -51,12 +51,13 @@ public class JsonUtils {
             try {
                 result = mapper.readValue(json, type);
             } catch (Exception e) {
-                log.error("Error while converting string json to object.\n" +
-                                   "Json: {}\n" +
-                                   "Object type: {}", json, type, e);
+                log.error("""
+                                   Error while converting string json to object.
+                                   Json: {}
+                                   Object type: {}""", json, type, e);
             }
         } else {
-            if (log.isDebugEnabled()) log.debug("Can't create object {} from json {}", type, json);
+            log.debug("Can't create object {} from json {}", type, json);
         }
         return result;
     }
@@ -97,12 +98,13 @@ public class JsonUtils {
             try {
                 result = mapper.convertValue(obj, ObjectNode.class);
             } catch (Exception e) {
-                log.error("Error while converting object to json.\n" +
-                                  "Object class: {}\n" +
-                                  "Object: {}", obj.getClass(), obj, e);
+                log.error("""
+                                  Error while converting object to json.
+                                  Object class: {}
+                                  Object: {}""", obj.getClass(), obj, e);
             }
         } else {
-            if(log.isDebugEnabled()) log.debug("Can't create json from null object");
+            log.debug("Can't create json from null object");
         }
         return result;
     }
@@ -182,7 +184,7 @@ public class JsonUtils {
         if (json != null && key != null && !key.isEmpty()) {
             json.put(key, value);
         } else {
-            if (log.isDebugEnabled()) log.debug("Data [{}] with key [{}] wasn't put into json [{}]", value, key, json);
+            log.debug("Data [{}] with key [{}] wasn't put into json [{}]", value, key, json);
         }
     }
 
@@ -197,7 +199,7 @@ public class JsonUtils {
         if (json != null && key != null && !key.isEmpty()) {
             json.replace(key, value);
         } else {
-            if (log.isTraceEnabled()) log.trace("Data [{}] with key [{}] wasn't put into json [{}]", value, key, json);
+            log.trace("Data [{}] with key [{}] wasn't put into json [{}]", value, key, json);
         }
     }
 }

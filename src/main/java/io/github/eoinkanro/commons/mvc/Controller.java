@@ -1,33 +1,27 @@
 package io.github.eoinkanro.commons.mvc;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
 /**
  * Controller with {@link View} and logic
  */
-public abstract class Controller {
+@RequiredArgsConstructor
+public abstract class Controller<V extends View> {
 
-    /**
-     * Id of controller
-     *
-     * @return id
-     */
-    public abstract Long getId();
-
-    /**
-     * View of controller
-     *
-     * @param view view
-     */
-    public abstract void setView(View view);
+    @Getter
+    protected final Long id;
+    protected final V view;
 
     /**
      * Run controller
      *
      * @return {@link Action}
      */
-    public final Action perform() {
+    public final Action perform(ActionData actionData) {
         Action result = null;
         while (result == null) {
-            result = performLogic();
+            result = performLogic(actionData);
         }
 
         return result;
@@ -38,7 +32,7 @@ public abstract class Controller {
      *
      * @return {@link Action}
      */
-    protected abstract Action performLogic();
+    protected abstract Action performLogic(ActionData actionData);
 
     public String toString() {
         return "Controller [Name: " + this.getClass().getSimpleName() + " Id: " + getId() +"]";

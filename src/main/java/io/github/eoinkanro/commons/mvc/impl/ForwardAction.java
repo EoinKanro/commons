@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Getter
 @RequiredArgsConstructor
-public class ForwardAction implements Action {
+public class ForwardAction extends Action {
 
     /**
      * Id of next controller
@@ -17,7 +17,7 @@ public class ForwardAction implements Action {
     private final long nextControllerId;
 
     /**
-     * If it's necessary to save current controller to stack
+     * If it's necessary to save current controller to stack, so you can return to it
      */
     private final boolean saveCurrent;
 

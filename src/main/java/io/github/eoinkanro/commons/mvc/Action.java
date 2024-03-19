@@ -1,7 +1,13 @@
 package io.github.eoinkanro.commons.mvc;
 
+import lombok.Getter;
+
 /**
  * Action of {@link Controller}
  */
-public interface Action {
+@Getter
+public abstract class Action {
+
+    private final ActionData actionData = new ActionData();
+
 }
