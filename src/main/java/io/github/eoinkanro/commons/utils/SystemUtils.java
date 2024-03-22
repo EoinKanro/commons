@@ -29,8 +29,13 @@ public class SystemUtils {
     private static final String OS_SUSE = "suse";
     private static final String OS_UBUNTU = "ubuntu";
     private static final String OS_FEDORA = "fedora";
+    private static final String OS_DEBIAN = "debian";
     private static final String OS_GNU = "gnu";
-    private static final String OS_RASPBIAN = "raspbian";
+    private static final String OS_RASPB = "raspb";
+    private static final String OS_SOLARIS = "solaris";
+    private static final String OS_HP_UX = "hp-ux";
+    private static final String OS_POP = "pop!";
+    private static final String OS_MANJARO = "manjaro";
 
 
     private static OsType osType = null;
@@ -64,7 +69,8 @@ public class SystemUtils {
                 osType = OsType.MAC;
             } else if (os.contains(OS_NIX) || os.contains(OS_NUX) || os.contains(OS_AIX) || os.contains(OS_RIX)
                        || os.contains(OS_BSD) || os.contains(OS_SUSE) || os.contains(OS_UBUNTU) || os.contains(OS_FEDORA)
-                       || os.contains(OS_GNU) || os.contains(OS_RASPBIAN)) {
+                       || os.contains(OS_DEBIAN) || os.contains(OS_GNU) || os.contains(OS_RASPB) || os.contains(OS_SOLARIS)
+                       || os.contains(OS_HP_UX) || os.contains(OS_POP) || os.contains(OS_MANJARO)) {
                 osType = OsType.UNIX;
             } else {
                 osType = OsType.OTHER;
