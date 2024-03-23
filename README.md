@@ -1,5 +1,5 @@
 # commons
-[![CodeQL](https://github.com/EoinKanro/commons/actions/workflows/codeql.yml/badge.svg?branch=main&kill_cache=1)](https://github.com/EoinKanro/commons/actions/workflows/codeql.yml?branch=main)
+[![CodeQL](https://github.com/EoinKanro/commons/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/EoinKanro/commons/actions/workflows/codeql.yml?branch=main)
 [![Coverage Status](https://coveralls.io/repos/github/EoinKanro/commons/badge.svg?branch=main&kill_cache=1)](https://coveralls.io/github/EoinKanro/commons?branch=main)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.eoinkanro/commons/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.eoinkanro/commons)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
