@@ -1,4 +1,4 @@
-name: Build and Test Pipeline
+name: Coveralls coverage
 on:
   workflow_dispatch:
   push:
