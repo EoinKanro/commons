@@ -2,8 +2,8 @@ name: Build and Test Pipeline
 on:
   workflow_dispatch:
   push:
-    tags:
-      - v*
+    branches:
+      - main
   pull_request:
     branches: [ main ]
 jobs:
