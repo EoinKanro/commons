@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * Helps with jackson json
+ * Utility class for jackson json
  */
 @Log4j2
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -119,7 +119,7 @@ public class JsonUtils {
     @Nullable
     public static String getString(JsonNode json, String key) {
         String result = null;
-        if (json != null && json.has(key)) {
+        if (json != null && key != null && json.has(key)) {
             JsonNode value = json.get(key);
             if (!value.isNull()) {
                 result = value.asText();
@@ -137,7 +137,7 @@ public class JsonUtils {
      */
     @Nullable
     public static ObjectNode getJson(ObjectNode json, String key) {
-        return getJsonObject(json, key);
+        return getJsonObject(json, key, ObjectNode.class);
     }
 
     /**
@@ -149,7 +149,7 @@ public class JsonUtils {
      */
     @Nullable
     public static ArrayNode getArray(ObjectNode json, String key) {
-        return getJsonObject(json, key);
+        return getJsonObject(json, key, ArrayNode.class);
     }
 
     /**
@@ -161,11 +161,11 @@ public class JsonUtils {
      * @param <T> type of json object
      */
     @Nullable
-    private static <T> T getJsonObject(ObjectNode json, String key) {
+    private static <T> T getJsonObject(ObjectNode json, String key, Class<T> type) {
         T result = null;
-        if (json != null && json.has(key)) {
+        if (json != null && key != null && json.has(key)) {
             try {
-                result = (T) json.get(key);
+                result = type.cast(json.get(key));
             } catch (Exception e) {
                 log.error("Error while getting json", e);
             }
