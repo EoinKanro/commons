@@ -56,24 +56,6 @@ class MvcWorkerTest {
         Mockito.verify(secondController, Mockito.times(1)).perform(any());
     }
 
-    private Controller<SimpleView> createForwardController(Long id, Long toId) {
-        return Mockito.spy(new Controller<>(id, new SimpleView()) {
-            @Override
-            protected Action performLogic(ActionData actionData) {
-                return new ForwardAction(toId, false);
-            }
-        });
-    }
-
-    private Controller<SimpleView> createBackwardController(Long id) {
-        return Mockito.spy(new Controller<SimpleView>(id, new SimpleView()) {
-            @Override
-            protected Action performLogic(ActionData actionData) {
-                return new BackwardAction();
-            }
-        });
-    }
-
     @Test
     void perform_twoControllersAndData_calledBothAndDataExists() {
         MvcWorker mvcWorker = new MvcWorker();
@@ -155,7 +137,7 @@ class MvcWorkerTest {
     }
 
     @Test
-    void perform_oneControllerForward_calledTwice() {
+    void perform_oneControllerForwardSaved_calledTwice() {
         MvcWorker mvcWorker = new MvcWorker();
 
         var firstController = Mockito.spy(new Controller<>(MvcWorker.FIRST_CONTROLLER_ID, new SimpleView()) {
@@ -176,6 +158,48 @@ class MvcWorkerTest {
         mvcWorker.perform();
 
         Mockito.verify(firstController, Mockito.times(2)).perform(any());
+    }
+
+    @Test
+    void perform_oneControllerForwardNotSaved_calledTwice() {
+        MvcWorker mvcWorker = new MvcWorker();
+
+        var firstController = Mockito.spy(new Controller<>(MvcWorker.FIRST_CONTROLLER_ID, new SimpleView()) {
+
+            private boolean isCalled = false;
+
+            @Override
+            protected Action performLogic(ActionData actionData) {
+                if (!isCalled) {
+                    isCalled = true;
+                    return new ForwardAction(SECOND_ID, false);
+                }
+                return new BackwardAction();
+            }
+        });
+
+        mvcWorker.addController(firstController);
+        mvcWorker.perform();
+
+        Mockito.verify(firstController, Mockito.times(2)).perform(any());
+    }
+
+    private Controller<SimpleView> createForwardController(Long id, Long toId) {
+        return Mockito.spy(new Controller<>(id, new SimpleView()) {
+            @Override
+            protected Action performLogic(ActionData actionData) {
+                return new ForwardAction(toId, false);
+            }
+        });
+    }
+
+    private Controller<SimpleView> createBackwardController(Long id) {
+        return Mockito.spy(new Controller<SimpleView>(id, new SimpleView()) {
+            @Override
+            protected Action performLogic(ActionData actionData) {
+                return new BackwardAction();
+            }
+        });
     }
 
 }
