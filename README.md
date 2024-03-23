@@ -1,4 +1,5 @@
 # commons
+[![Coverage Status](https://coveralls.io/repos/github/EoinKanro/commons/badge.svg?branch=main)](https://coveralls.io/github/EoinKanro/commons?branch=main)
 
 How to use:
 - add repository
