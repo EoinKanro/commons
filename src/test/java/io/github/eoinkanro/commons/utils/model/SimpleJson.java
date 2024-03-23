@@ -9,7 +9,7 @@ import java.util.Objects;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TestSimpleJson {
+public class SimpleJson {
 
     private String name;
     private int number;
@@ -19,7 +19,7 @@ public class TestSimpleJson {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TestSimpleJson testJson = (TestSimpleJson) o;
+        SimpleJson testJson = (SimpleJson) o;
         return number == testJson.number && Objects.equals(name, testJson.name) && Objects.equals(list, testJson.list);
     }
 

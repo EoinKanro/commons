@@ -3,9 +3,9 @@ package io.github.eoinkanro.commons.utils;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import io.github.eoinkanro.commons.utils.model.BadTestJson;
-import io.github.eoinkanro.commons.utils.model.TestBigJson;
-import io.github.eoinkanro.commons.utils.model.TestSimpleJson;
+import io.github.eoinkanro.commons.utils.model.BadJson;
+import io.github.eoinkanro.commons.utils.model.BigJson;
+import io.github.eoinkanro.commons.utils.model.SimpleJson;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -44,15 +44,15 @@ class JsonUtilsTest {
 
     @Test
     void toObject_ok() {
-        TestSimpleJson testJson = createTestObject();
-        TestSimpleJson parsedJson = JsonUtils.toObject(testJson.toString(), TestSimpleJson.class);
+        SimpleJson testJson = createTestObject();
+        SimpleJson parsedJson = JsonUtils.toObject(testJson.toString(), SimpleJson.class);
 
         assertEquals(testJson, parsedJson);
     }
 
     @Test
     void toJsonNode_ok() {
-        TestSimpleJson testJson = createTestObject();
+        SimpleJson testJson = createTestObject();
         JsonNode parsedJson = JsonUtils.toJsonNode(testJson.toString());
 
         compare(testJson, (ObjectNode) parsedJson);
@@ -60,7 +60,7 @@ class JsonUtilsTest {
 
     @Test
     void toObjectNode_string_ok() {
-        TestSimpleJson testJson = createTestObject();
+        SimpleJson testJson = createTestObject();
         ObjectNode parsedJson = JsonUtils.toObjectNode(testJson.toString());
 
         compare(testJson, parsedJson);
@@ -74,10 +74,10 @@ class JsonUtilsTest {
 
     static Stream<Arguments> provide_toObject_returnNull() {
         return Stream.of(
-                Arguments.of(null, TestSimpleJson.class),
-                Arguments.of("", TestSimpleJson.class),
+                Arguments.of(null, SimpleJson.class),
+                Arguments.of("", SimpleJson.class),
                 Arguments.of(createTestObject().toString(), null),
-                Arguments.of(BAD_OBJECT_STRING, TestSimpleJson.class)
+                Arguments.of(BAD_OBJECT_STRING, SimpleJson.class)
         );
     }
 
@@ -103,7 +103,7 @@ class JsonUtilsTest {
 
     @Test
     void toObjectNode_object_ok() {
-        TestSimpleJson testJson = createTestObject();
+        SimpleJson testJson = createTestObject();
         ObjectNode parsedObject = JsonUtils.toObjectNode(testJson);
 
         compare(testJson, parsedObject);
@@ -118,13 +118,13 @@ class JsonUtilsTest {
     static Stream<Arguments> provide_toObjectNode_object_returnNull() {
         return Stream.of(
                Arguments.of((Object) null),
-               Arguments.of(new BadTestJson(NAME_VALUE))
+               Arguments.of(new BadJson(NAME_VALUE))
         );
     }
 
     @Test
     void getString_ok() {
-        TestSimpleJson testJson = createTestObject();
+        SimpleJson testJson = createTestObject();
         JsonNode json = JsonUtils.toJsonNode(testJson.toString());
 
         assertEquals(testJson.getName(), JsonUtils.getString(json, NAME));
@@ -150,7 +150,7 @@ class JsonUtilsTest {
 
     @Test
     void getJson_ok() {
-        TestBigJson testJson = new TestBigJson(createTestObject());
+        BigJson testJson = new BigJson(createTestObject());
         ObjectNode json = JsonUtils.toObjectNode(testJson.toString());
 
         ObjectNode result = JsonUtils.getJson(json, JSON);
@@ -175,7 +175,7 @@ class JsonUtilsTest {
 
     @Test
     void getArray_ok() {
-        TestSimpleJson testJson = createTestObject();
+        SimpleJson testJson = createTestObject();
         ObjectNode json = JsonUtils.toObjectNode(testJson.toString());
 
         ArrayNode result = JsonUtils.getArray(json, LIST);
@@ -277,11 +277,11 @@ class JsonUtilsTest {
         );
     }
 
-    private static TestSimpleJson createTestObject() {
-        return new TestSimpleJson(NAME_VALUE, NUMBER_VALUE, List.of(LIST_VALUE_FIRST, LIST_VALUE_SECOND));
+    private static SimpleJson createTestObject() {
+        return new SimpleJson(NAME_VALUE, NUMBER_VALUE, List.of(LIST_VALUE_FIRST, LIST_VALUE_SECOND));
     }
 
-    private void compare(TestSimpleJson testJson, ObjectNode objectNode) {
+    private void compare(SimpleJson testJson, ObjectNode objectNode) {
         assertNotNull(objectNode);
         assertEquals(3, objectNode.size());
         assertEquals(testJson.getName(), objectNode.get(NAME).asText());

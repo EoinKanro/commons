@@ -7,9 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class TestBigJson {
+public class BigJson {
 
-    private TestSimpleJson json;
+    private SimpleJson json;
 
     @Override
     public String toString() {
