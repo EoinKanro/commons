@@ -1,0 +1,27 @@
+name: Build and Test Pipeline
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - v*
+  pull_request:
+    branches: [ main ]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🧺 Checkout Repository Code
+        uses: actions/checkout@v3
+
+      - name: 🛠 Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+          cache: maven
+
+      - name: 📦 Build with Maven
+        run: mvn clean package jacoco:report
+
+      - name: 🚀 Coveralls Coverage Report Submission
+        run: mvn coveralls:report --define repoToken=${{ secrets.COVERALLS_REPO_TOKEN }}

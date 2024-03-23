@@ -24,6 +24,11 @@
         <maven.javadoc.version>3.6.3</maven.javadoc.version>
         <maven.source.version>3.3.0</maven.source.version>
         <maven.jreleaser.version>1.11.0</maven.jreleaser.version>
+        <maven.surefire.version>3.2.5</maven.surefire.version>
+        <maven.jacoco.version>0.8.11</maven.jacoco.version>
+        <maven.coveralls.version>4.3.0</maven.coveralls.version>
+        <maven.jaxb.version>2.3.1</maven.jaxb.version>
+        <maven.sonar.version>3.9.1.2184</maven.sonar.version>
     </properties>
 
     <name>commons</name>
@@ -107,6 +112,11 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven.surefire.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven.compiler.version}</version>
                 <configuration>
@@ -114,43 +124,49 @@
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
+            <!--Jacoco-->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${maven.jacoco.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--Coveralls-->
+            <plugin>
+                <groupId>org.eluder.coveralls</groupId>
+                <artifactId>coveralls-maven-plugin</artifactId>
+                <version>${maven.coveralls.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>javax.xml.bind</groupId>
+                        <artifactId>jaxb-api</artifactId>
+                        <version>${maven.jaxb.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <!--Sonar-->
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>${maven.sonar.version}</version>
+            </plugin>
         </plugins>
     </build>
 
     <profiles>
-        <profile>
-            <id>sonar</id>
-            <build>
-                <plugins>
-                    <!--Sonar-->
-                    <plugin>
-                        <groupId>org.sonarsource.scanner.maven</groupId>
-                        <artifactId>sonar-maven-plugin</artifactId>
-                        <version>3.9.1.2184</version>
-                    </plugin>
-                    <!--Jacoco-->
-                    <plugin>
-                        <groupId>org.jacoco</groupId>
-                        <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>0.8.10</version>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>prepare-agent</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>report</id>
-                                <phase>prepare-package</phase>
-                                <goals>
-                                    <goal>report</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
         <profile>
             <id>release</id>
             <build>
