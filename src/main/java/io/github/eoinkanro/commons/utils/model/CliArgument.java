@@ -26,23 +26,15 @@ public class CliArgument<T> {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj instanceof CliArgument<?> arg) {
-            return Objects.equals(arg.getReferenceClass(), this.referenceClass) &&
-                   Objects.equals(arg.getKey(), this.key);
-        }
-
-        return false;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CliArgument<?> that = (CliArgument<?>) o;
+        return Objects.equals(key, that.key) && Objects.equals(referenceClass, that.referenceClass);
     }
 
     @Override
     public int hashCode() {
-        int result = key != null ? key.hashCode() : 0;
-        result = 31 * result + (referenceClass != null ? referenceClass.hashCode() : 0);
-        return result;
+        return Objects.hash(key, referenceClass);
     }
-
 }
