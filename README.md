@@ -1,5 +1,6 @@
 # commons
 [![Coverage Status](https://coveralls.io/repos/github/EoinKanro/commons/badge.svg?branch=main)](https://coveralls.io/github/EoinKanro/commons?branch=main)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.eoinkanro/commons/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.eoinkanro/commons)
 
 How to use:
 - add repository
