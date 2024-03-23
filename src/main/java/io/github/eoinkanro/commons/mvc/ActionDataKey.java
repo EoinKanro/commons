@@ -1,9 +1,11 @@
 package io.github.eoinkanro.commons.mvc;
 
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 import java.util.Objects;
 
+@ToString
 @RequiredArgsConstructor
 public class ActionDataKey<T> {
 

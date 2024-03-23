@@ -3,6 +3,7 @@ package io.github.eoinkanro.commons.mvc;
 import io.github.eoinkanro.commons.mvc.impl.ForwardAction;
 import io.github.eoinkanro.commons.mvc.impl.StayAction;
 import jakarta.annotation.Nullable;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.*;
@@ -21,15 +22,16 @@ public class MvcWorker {
     /**
      * Stack of controllers
      */
-    protected final Deque<Controller<?>> controllersStack = new LinkedList<>();
+    private final Deque<Controller<?>> controllersStack = new LinkedList<>();
 
     /**
      * All existing controllers
      * Controller id - Controller
      */
-    protected final Map<Long, Controller<?>> controllers = new HashMap<>();
+    private final Map<Long, Controller<?>> controllers = new HashMap<>();
 
-    private ActionData previousControllerData = null;
+    @Getter
+    private ActionData controllerData = null;
 
     /**
      * Run MVC worker
@@ -43,8 +45,8 @@ public class MvcWorker {
         controllersStack.add(firstController);
         while (!controllersStack.isEmpty()) {
             Controller<?> currentController = controllersStack.pollLast();
-            Action action = currentController.perform(previousControllerData);
-            previousControllerData = action.getActionData();
+            Action action = currentController.perform(controllerData);
+            controllerData = action.getActionData();
 
             if (action instanceof ForwardAction forwardAction) {
                 if (forwardAction.isSaveCurrent()) {

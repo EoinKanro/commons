@@ -1,16 +1,22 @@
 package io.github.eoinkanro.commons.mvc;
 
 import jakarta.annotation.Nullable;
+import lombok.extern.log4j.Log4j2;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
+@Log4j2
 public class ActionData {
 
-    private final Map<ActionDataKey<?>, Object> data = new HashMap<>();
+    private final Map<ActionDataKey<?>, Object> data = new ConcurrentHashMap<>();
 
     public <T> void put(ActionDataKey<T> key, T value) {
-        data.put(key, value);
+        if (value != null) {
+            data.put(key, value);
+        } else {
+            log.trace("Can't put key {} with null value", key);
+        }
     }
 
     public void putAll(ActionData actionData) {
