@@ -10,11 +10,11 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CliArgumentUtilsTest {
 
@@ -24,13 +24,13 @@ class CliArgumentUtilsTest {
 
     @BeforeEach
     @SneakyThrows
-    void setUp() {
-        Field field = CliArgumentUtils.class.getDeclaredField("PARSED_ARGUMENTS");
+    void clear() {
+        getParsedArguments().clear();
+        getCliArguments().clear();
+
+        Field field = CliArgumentUtils.class.getDeclaredField("isInit");
         field.setAccessible(true);
-
-        Map<?, ?> parsedArguments = (Map<?, ?>) field.get(null);
-        parsedArguments.clear();
-
+        field.set(null, false);
         field.setAccessible(false);
     }
 
@@ -99,6 +99,68 @@ class CliArgumentUtilsTest {
         var argument = new CliArgument<>(ARGUMENT_KEY, CliArgumentCastFunctions.TO_STRING, String.class);
         assertNull(CliArgumentUtils.getArgument(argument));
         assertNull(CliArgumentUtils.getArgument(argument));
+    }
+
+    @ParameterizedTest
+    @MethodSource("provide_init_ok")
+    void init_ok(String[] args, Map<String, String> expected) {
+        CliArgumentUtils.init(args);
+        assertEquals(expected, getCliArguments());
+    }
+
+    static Stream<Arguments> provide_init_ok() {
+        return Stream.of(
+                Arguments.of(new String[]{}, Map.of()),
+                Arguments.of(new String[]{"a", "-b"}, Map.of()),
+                Arguments.of(new String[]{"-a", "b"}, Map.of("a", "b")),
+                Arguments.of(new String[]{"-a", "b", "c"}, Map.of("a", "b" + CliArgumentUtils.ARG_DELIMITER + "c")),
+                Arguments.of(new String[]{"-a", "b", "-c", "d"}, Map.of("a", "b", "c", "d"))
+        );
+    }
+
+    @Test
+    void init_callTwice_skipSecond() {
+        CliArgumentUtils.init(new String[]{"-a", "b"});
+        CliArgumentUtils.init(new String[]{"-c", "d"});
+
+        assertEquals(Map.of("a", "b"), getCliArguments());
+    }
+
+    @Test
+    @SneakyThrows
+    void init_callWithNull_notInit() {
+        CliArgumentUtils.init(null);
+
+        Field field = CliArgumentUtils.class.getDeclaredField("isInit");
+        field.setAccessible(true);
+        boolean isInit = field.getBoolean(null);
+        field.setAccessible(false);
+
+        assertFalse(isInit);
+    }
+
+    @Test
+    void initGetArgument_parseList_ok() {
+        CliArgumentUtils.init(new String[]{"-a", "b", "c"});
+        CliArgument<List<String>> argument = new CliArgument<>("a", CliArgumentCastFunctions.TO_LIST, (Class<List<String>>) ((Class)List.class));
+        assertEquals(List.of("b", "c"), CliArgumentUtils.getArgument(argument));
+    }
+
+    private Map<?, ?> getParsedArguments() {
+        return getMap("PARSED_ARGUMENTS");
+    }
+
+    private Map<?, ?> getCliArguments() {
+        return getMap("CLI_ARGUMENTS");
+    }
+
+    @SneakyThrows
+    private Map<?, ?> getMap(String fieldName) {
+        Field field = CliArgumentUtils.class.getDeclaredField(fieldName);
+        field.setAccessible(true);
+        Map<?, ?> result = (Map<?, ?>) field.get(null);
+        field.setAccessible(false);
+        return result;
     }
 
 }
