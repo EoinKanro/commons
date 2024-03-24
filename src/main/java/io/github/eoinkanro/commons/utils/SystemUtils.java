@@ -49,7 +49,7 @@ public class SystemUtils {
         try {
             Thread.sleep(sleepMs);
         } catch (InterruptedException e) {
-            log.error("Interrupt error", e);
+            log.error("Sleeping was interrupted", e);
             Thread.currentThread().interrupt();
         }
     }

@@ -51,7 +51,7 @@ public class JsonUtils {
             try {
                 result = mapper.readValue(json, type);
             } catch (Exception e) {
-                log.error("""
+                log.warn("""
                                    Error while converting string json to object.
                                    Json: {}
                                    Object type: {}""", json, type, e);
@@ -98,7 +98,7 @@ public class JsonUtils {
             try {
                 result = mapper.convertValue(obj, ObjectNode.class);
             } catch (Exception e) {
-                log.error("""
+                log.warn("""
                                   Error while converting object to json.
                                   Object class: {}
                                   Object: {}""", obj.getClass(), obj, e);
@@ -167,7 +167,7 @@ public class JsonUtils {
             try {
                 result = type.cast(json.get(key));
             } catch (Exception e) {
-                log.error("Error while getting json", e);
+                log.warn("Error while getting json", e);
             }
         }
         return result;
@@ -199,7 +199,7 @@ public class JsonUtils {
         if (json != null && key != null && !key.isEmpty()) {
             json.replace(key, value);
         } else {
-            log.trace("Data [{}] with key [{}] wasn't put into json [{}]", value, key, json);
+            log.debug("Data [{}] with key [{}] wasn't put into json [{}]", value, key, json);
         }
     }
 }

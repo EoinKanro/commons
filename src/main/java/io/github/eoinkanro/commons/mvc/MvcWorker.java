@@ -75,7 +75,7 @@ public class MvcWorker {
     private Controller<?> getController(Long id) {
         Controller<?> controller = controllers.get(id);
         if (controller == null) {
-            log.error("Fatal error: can't find controller with id {}", id);
+            log.error("Can't find controller with id {}", id);
         }
         return controller;
     }
@@ -98,7 +98,7 @@ public class MvcWorker {
         Optional.ofNullable(controller).ifPresent(c -> {
             if (!controllers.containsKey(c.getId())) {
                 controllers.put(c.getId(), c);
-                log.debug("{} was added", c);
+                log.debug("Controller {} with id {} was added", c.getClass().getSimpleName(), c.getId());
             } else {
                 log.warn("{} wasn't added, the id is already registered", c);
             }

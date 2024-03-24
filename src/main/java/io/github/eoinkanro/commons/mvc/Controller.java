@@ -34,8 +34,4 @@ public abstract class Controller<V extends View> {
      */
     protected abstract Action performLogic(ActionData actionData);
 
-    public String toString() {
-        return "Controller [Name: " + this.getClass().getSimpleName() + " Id: " + getId() +"]";
-    }
-
 }
