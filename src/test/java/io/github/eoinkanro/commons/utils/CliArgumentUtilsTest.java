@@ -49,20 +49,73 @@ class CliArgumentUtilsTest {
 
     static Stream<Arguments> provide_getArgument_ok() {
         return Stream.of(
-                Arguments.of(new CliArgument<>(ARGUMENT_KEY, CliArgumentCastFunctions.TO_BYTE, Byte.class), Byte.valueOf((byte) DEFAULT_INT)),
-                Arguments.of(new CliArgument<>(ARGUMENT_KEY, CliArgumentCastFunctions.TO_SHORT, Short.class), Short.valueOf((short) DEFAULT_INT)),
-                Arguments.of(new CliArgument<>(ARGUMENT_KEY, CliArgumentCastFunctions.TO_INT, Integer.class), Integer.valueOf(DEFAULT_INT)),
-                Arguments.of(new CliArgument<>(ARGUMENT_KEY, CliArgumentCastFunctions.TO_LONG, Long.class), Long.valueOf(DEFAULT_INT)),
-                Arguments.of(new CliArgument<>(ARGUMENT_KEY, CliArgumentCastFunctions.TO_FLOAT, Float.class), Float.valueOf(DEFAULT_INT)),
-                Arguments.of(new CliArgument<>(ARGUMENT_KEY, CliArgumentCastFunctions.TO_DOUBLE, Double.class), Double.valueOf(53.4)),
-                Arguments.of(new CliArgument<>(ARGUMENT_KEY, CliArgumentCastFunctions.TO_BOOLEAN, Boolean.class), Boolean.valueOf(true)),
-                Arguments.of(new CliArgument<>(ARGUMENT_KEY, CliArgumentCastFunctions.TO_STRING, String.class), DEFAULT_STR)
+                Arguments.of(CliArgument.<Byte>builder()
+                        .key(ARGUMENT_KEY)
+                        .castFunction(CliArgumentCastFunctions.TO_BYTE)
+                        .referenceClass(Byte.class)
+                        .build()
+                        , Byte.valueOf((byte) DEFAULT_INT)
+                ),
+                Arguments.of(CliArgument.<Short>builder()
+                        .key(ARGUMENT_KEY)
+                        .castFunction(CliArgumentCastFunctions.TO_SHORT)
+                        .referenceClass(Short.class)
+                        .build()
+                        , Short.valueOf((short) DEFAULT_INT)
+                ),
+                Arguments.of(CliArgument.<Integer>builder()
+                        .key(ARGUMENT_KEY)
+                        .castFunction(CliArgumentCastFunctions.TO_INT)
+                        .referenceClass(Integer.class)
+                        .build()
+                        , Integer.valueOf(DEFAULT_INT)
+                ),
+                Arguments.of(CliArgument.<Long>builder()
+                        .key(ARGUMENT_KEY)
+                        .castFunction(CliArgumentCastFunctions.TO_LONG)
+                        .referenceClass(Long.class)
+                        .build()
+                        , Long.valueOf(DEFAULT_INT)
+                ),
+                Arguments.of(CliArgument.<Float>builder()
+                        .key(ARGUMENT_KEY)
+                        .castFunction(CliArgumentCastFunctions.TO_FLOAT)
+                        .referenceClass(Float.class)
+                        .build()
+                        , Float.valueOf(DEFAULT_INT)
+                ),
+                Arguments.of(CliArgument.<Double>builder()
+                        .key(ARGUMENT_KEY)
+                        .castFunction(CliArgumentCastFunctions.TO_DOUBLE)
+                        .referenceClass(Double.class)
+                        .build()
+                        , Double.valueOf(53.4)
+                ),
+                Arguments.of(CliArgument.<Boolean>builder()
+                        .key(ARGUMENT_KEY)
+                        .castFunction(CliArgumentCastFunctions.TO_BOOLEAN)
+                        .referenceClass(Boolean.class)
+                        .build()
+                        , Boolean.valueOf(true)
+                ),
+                Arguments.of(CliArgument.<String>builder()
+                        .key(ARGUMENT_KEY)
+                        .castFunction(CliArgumentCastFunctions.TO_STRING)
+                        .referenceClass(String.class)
+                        .build()
+                        , DEFAULT_STR
+                )
         );
     }
 
     @Test
     void getArgument_returnDefault() {
-        var cliArgument = new CliArgument<>(ARGUMENT_KEY, CliArgumentCastFunctions.TO_STRING, String.class, DEFAULT_STR);
+        var cliArgument = CliArgument.<String>builder()
+                .key(ARGUMENT_KEY)
+                .castFunction(CliArgumentCastFunctions.TO_STRING)
+                .referenceClass(String.class)
+                .defaultValue(DEFAULT_STR)
+                .build();
 
         String result = CliArgumentUtils.getArgument(cliArgument);
         assertEquals(DEFAULT_STR, result);
@@ -70,7 +123,12 @@ class CliArgumentUtilsTest {
 
     @Test
     void getArgument_getTwiceReturnTheSame() {
-        var cliArgument = new CliArgument<>(ARGUMENT_KEY, CliArgumentCastFunctions.TO_STRING, String.class, DEFAULT_STR);
+        var cliArgument = CliArgument.<String>builder()
+                .key(ARGUMENT_KEY)
+                .castFunction(CliArgumentCastFunctions.TO_STRING)
+                .referenceClass(String.class)
+                .defaultValue(DEFAULT_STR)
+                .build();
 
         String result = CliArgumentUtils.getArgument(cliArgument);
         assertEquals(DEFAULT_STR, result);
@@ -88,15 +146,20 @@ class CliArgumentUtilsTest {
     static Stream<Arguments> provide_getArgument_returnNull() {
         return Stream.of(
                 Arguments.of((Object) null),
-                Arguments.of(new CliArgument<>(null, CliArgumentCastFunctions.TO_STRING, String.class)),
-                Arguments.of(new CliArgument<>(ARGUMENT_KEY, null, String.class)),
-                Arguments.of(new CliArgument<>(ARGUMENT_KEY, CliArgumentCastFunctions.TO_STRING, String.class))
+                Arguments.of(new CliArgument<>(null, CliArgumentCastFunctions.TO_STRING, String.class, null, null)),
+                Arguments.of(new CliArgument<>(ARGUMENT_KEY, null, String.class, null, null)),
+                Arguments.of(new CliArgument<>(ARGUMENT_KEY, CliArgumentCastFunctions.TO_STRING, String.class, null, null))
         );
     }
 
     @Test
     void getArgument_getTwiceReturnNull() {
-        var argument = new CliArgument<>(ARGUMENT_KEY, CliArgumentCastFunctions.TO_STRING, String.class);
+        var argument = CliArgument.<String>builder()
+                .key(ARGUMENT_KEY)
+                .castFunction(CliArgumentCastFunctions.TO_STRING)
+                .referenceClass(String.class)
+                .build();
+
         assertNull(CliArgumentUtils.getArgument(argument));
         assertNull(CliArgumentUtils.getArgument(argument));
     }
@@ -106,7 +169,12 @@ class CliArgumentUtilsTest {
         try {
             System.setProperty(ARGUMENT_KEY, DEFAULT_STR);
 
-            CliArgument<Integer> argument = new CliArgument<>(ARGUMENT_KEY, CliArgumentCastFunctions.TO_INT, Integer.class);
+            CliArgument<Integer> argument = CliArgument.<Integer>builder()
+                    .key(ARGUMENT_KEY)
+                    .castFunction(CliArgumentCastFunctions.TO_INT)
+                    .referenceClass(Integer.class)
+                    .build();
+
             assertNull(CliArgumentUtils.getArgument(argument));
         } finally {
             System.clearProperty(ARGUMENT_KEY);
@@ -154,8 +222,32 @@ class CliArgumentUtilsTest {
     @Test
     void initGetArgument_parseList_ok() {
         CliArgumentUtils.init(new String[]{"-a", "b", "c"});
-        CliArgument<List<String>> argument = new CliArgument<>("a", CliArgumentCastFunctions.TO_LIST, (Class<List<String>>) ((Class)List.class));
+        CliArgument<List<String>> argument = CliArgument.<List<String>>builder()
+                .key("a")
+                .castFunction(CliArgumentCastFunctions.TO_LIST)
+                .referenceClass((Class<List<String>>) ((Class)List.class))
+                .build();
+
         assertEquals(List.of("b", "c"), CliArgumentUtils.getArgument(argument));
+    }
+
+    @ParameterizedTest
+    @MethodSource("provide_getHelp_ok")
+    void getHelp_ok(CliArgument<?> argument, String expected) {
+        assertEquals(expected, argument.getHelp().trim());
+    }
+
+    static Stream<Arguments> provide_getHelp_ok() {
+        return Stream.of(
+                Arguments.of(
+                        CliArgument.<String>builder().build(),
+                        "Key: null"
+                ),
+                Arguments.of(
+                        CliArgument.<String>builder().key(ARGUMENT_KEY).referenceClass(String.class).defaultValue(DEFAULT_STR).description(DEFAULT_STR).build(),
+                        "Key: " + ARGUMENT_KEY + " Type: String Default value: " + DEFAULT_STR + " Description: " + DEFAULT_STR
+                )
+        );
     }
 
     private Map<?, ?> getParsedArguments() {
