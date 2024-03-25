@@ -9,7 +9,7 @@ How to use:
 ```xml
   <repositories>
     <repository>
-      <id>sonotype</id>
+      <id>sonatype</id>
       <url>https://oss.sonatype.org/content/repositories/releases/</url>
     </repository>
   </repositories>
