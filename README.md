@@ -10,7 +10,7 @@ How to use:
   <repositories>
     <repository>
       <id>sonatype</id>
-      <url>https://oss.sonatype.org/content/repositories/releases/</url>
+      <url>https://s01.oss.sonatype.org/service/local/repositories/releases/content</url>
     </repository>
   </repositories>
 ```
