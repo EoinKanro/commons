@@ -101,6 +101,18 @@ class CliArgumentUtilsTest {
         assertNull(CliArgumentUtils.getArgument(argument));
     }
 
+    @Test
+    void getArgument_BadParsing_getNull() {
+        try {
+            System.setProperty(ARGUMENT_KEY, DEFAULT_STR);
+
+            CliArgument<Integer> argument = new CliArgument<>(ARGUMENT_KEY, CliArgumentCastFunctions.TO_INT, Integer.class);
+            assertNull(CliArgumentUtils.getArgument(argument));
+        } finally {
+            System.clearProperty(ARGUMENT_KEY);
+        }
+    }
+
     @ParameterizedTest
     @MethodSource("provide_init_ok")
     void init_ok(String[] args, Map<String, String> expected) {

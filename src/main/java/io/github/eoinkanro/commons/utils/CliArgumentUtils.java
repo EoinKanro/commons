@@ -86,10 +86,15 @@ public class CliArgumentUtils {
 
         String argumentValue = getArgumentValue(argument.getKey());
         T result;
-        if (argumentValue == null) {
-            result = argument.getDefaultValue() == null ? null : argument.getDefaultValue();
-        } else {
-            result = argument.getCastFunction().apply(argumentValue);
+        try {
+            if (argumentValue == null) {
+                result = argument.getDefaultValue() == null ? null : argument.getDefaultValue();
+            } else {
+                result = argument.getCastFunction().apply(argumentValue);
+            }
+        } catch (Exception e) {
+            log.warn("Something went wrong while getting {}", argument.getKey(), e);
+            result = null;
         }
 
         PARSED_ARGUMENTS.put(argument, Optional.ofNullable(result));
