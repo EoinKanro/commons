@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -84,7 +85,7 @@ public class CliArgumentUtils {
             return value == null ? null : (T) value;
         }
 
-        String argumentValue = getArgumentValue(argument.getKey());
+        String argumentValue = getArgumentValue(argument.getKeys());
         T result;
         try {
             if (argumentValue == null) {
@@ -93,7 +94,7 @@ public class CliArgumentUtils {
                 result = argument.getCastFunction().apply(argumentValue);
             }
         } catch (Exception e) {
-            log.warn("Something went wrong while getting {}", argument.getKey(), e);
+            log.warn("Something went wrong while getting {}", argument.getKeys(), e);
             result = null;
         }
 
@@ -101,15 +102,24 @@ public class CliArgumentUtils {
         return result;
     }
 
-    private static String getArgumentValue(String key) {
-        String result = CLI_ARGUMENTS.get(key);
-        if (result == null) {
-            result = System.getProperty(key);
+    @Nullable
+    private static String getArgumentValue(List<String> keys) {
+        for (String key : keys) {
+            String result = CLI_ARGUMENTS.get(key);
+            if (result == null) {
+                result = System.getProperty(key);
+            }
+
+            if (result != null) {
+                return result;
+            }
         }
-        return result;
+
+        return null;
     }
 
     private static boolean isArgumentFine(CliArgument<?> argument) {
-        return argument != null && argument.getKey() != null && argument.getCastFunction() != null;
+        return argument != null && argument.getKeys() != null && !argument.getKeys().isEmpty()
+                && argument.getCastFunction() != null;
     }
 }
