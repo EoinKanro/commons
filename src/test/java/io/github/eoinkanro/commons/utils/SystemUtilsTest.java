@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class SystemUtilsTest {
 
     private static final String SYSTEM_PARAMETER_OS = "os.name";
+    private static final String CURRENT_OS = System.getProperty(SYSTEM_PARAMETER_OS);
 
     @ParameterizedTest
     @MethodSource("provide_getOsType_returnWindows")
@@ -23,7 +24,7 @@ class SystemUtilsTest {
 
         System.setProperty(SYSTEM_PARAMETER_OS, osName);
         assertEquals(expected, SystemUtils.getOsType());
-        System.clearProperty(SYSTEM_PARAMETER_OS);
+        System.setProperty(SYSTEM_PARAMETER_OS, CURRENT_OS);
     }
 
     @SneakyThrows
